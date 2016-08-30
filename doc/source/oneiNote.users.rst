@@ -1,11 +1,11 @@
 oneiNote.users package
-=======================================
+======================
 
 Submodules
 ----------
 
 oneiNote.users.forms module
---------------------------------------------
+---------------------------
 
 .. automodule:: oneiNote.users.forms
     :members:
@@ -13,7 +13,7 @@ oneiNote.users.forms module
     :show-inheritance:
 
 oneiNote.users.models module
----------------------------------------------
+----------------------------
 
 .. automodule:: oneiNote.users.models
     :members:
@@ -21,7 +21,7 @@ oneiNote.users.models module
     :show-inheritance:
 
 oneiNote.users.views module
---------------------------------------------
+---------------------------
 
 .. automodule:: oneiNote.users.views
     :members:

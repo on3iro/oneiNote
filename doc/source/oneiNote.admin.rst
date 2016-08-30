@@ -1,11 +1,11 @@
 oneiNote.admin package
-=======================================
+======================
 
 Submodules
 ----------
 
 oneiNote.admin.views module
---------------------------------------------
+---------------------------
 
 .. automodule:: oneiNote.admin.views
     :members:

@@ -1,11 +1,11 @@
 oneiNote.main package
-======================================
+=====================
 
 Submodules
 ----------
 
 oneiNote.main.views module
--------------------------------------------
+--------------------------
 
 .. automodule:: oneiNote.main.views
     :members:
