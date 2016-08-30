@@ -7,7 +7,7 @@ from flask_script import Manager, Server, Shell
 from flask_migrate import Migrate, MigrateCommand
 from flask_script.commands import Clean, ShowUrls
 
-from oneiNote.app import create_app 
+from oneiNote.app import create_app
 from oneiNote.database import db
 from oneiNote.settings import DevConfig, ProdConfig
 from oneiNote.users.models import User
@@ -49,7 +49,7 @@ def create_admin():
         print('Admin user already exists. Try to login with: \n',
               'username: admin \n',
               'password: admin')
-  
+
 
 manager.add_command('server', Server())
 manager.add_command('shell', Shell(make_context=_make_context))

@@ -13,6 +13,7 @@ class Role(SurrogatePK, Model):
     """A role for a user."""
 
     __tablename__ = 'roles'
+
     name = Column(db.String(80), unique=True, nullable=False)
     user_id = reference_col('users', nullable=True)
     user = relationship('User', backref='roles')
@@ -30,6 +31,7 @@ class User(UserMixin, SurrogatePK, Model):
     """A user of the app."""
 
     __tablename__ = 'users'
+
     username = Column(db.String(80), unique=True, nullable=False)
     email = Column(db.String(80), unique=True, nullable=False)
     #: The hashed password

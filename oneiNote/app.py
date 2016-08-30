@@ -10,6 +10,8 @@ from oneiNote.main.views import main_blueprint
 from oneiNote.admin.views import MyModelView, MyAdminIndexView, UserView
 from oneiNote.users.views import users_blueprint
 from oneiNote.users.models import User, Role
+from oneiNote.notes.views import notes_blueprint
+from oneiNote.notes.models import Note, Calendar_entry
 
 
 def create_app(config_object=ProdConfig):
@@ -43,6 +45,7 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(users_blueprint)
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(notes_blueprint)
     return None
 
 
@@ -66,6 +69,8 @@ def init_admin(app):
     )
     admin.add_view(MyModelView(Role, db.session))
     admin.add_view(UserView(User, db.session))
+    admin.add_view(MyModelView(Note, db.session))
+    admin.add_view(MyModelView(Calendar_entry, db.session))
 
     return None
 
