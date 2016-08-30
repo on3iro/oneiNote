@@ -6,6 +6,6 @@ install:
     - pip install -r requirements/dev.txt
     - pip install coveralls
 script:
-    - py.test --cov=oneiNote
+    - py.test -v --cov=oneiNote
 after_success:
     - coveralls
