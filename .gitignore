@@ -1,3 +1,8 @@
+#
+# Application specific
+#
+dev.db
+ 
 ###### Node ########
 # Logs
 logs
