@@ -1,5 +1,5 @@
 oneiNote package
-=================================
+================
 
 Subpackages
 -----------
@@ -14,7 +14,7 @@ Submodules
 ----------
 
 oneiNote.app module
-------------------------------------
+-------------------
 
 .. automodule:: oneiNote.app
     :members:
@@ -22,7 +22,7 @@ oneiNote.app module
     :show-inheritance:
 
 oneiNote.database module
------------------------------------------
+------------------------
 
 .. automodule:: oneiNote.database
     :members:
@@ -30,7 +30,7 @@ oneiNote.database module
     :show-inheritance:
 
 oneiNote.extensions module
--------------------------------------------
+--------------------------
 
 .. automodule:: oneiNote.extensions
     :members:
@@ -38,7 +38,7 @@ oneiNote.extensions module
     :show-inheritance:
 
 oneiNote.settings module
------------------------------------------
+------------------------
 
 .. automodule:: oneiNote.settings
     :members:
@@ -46,7 +46,7 @@ oneiNote.settings module
     :show-inheritance:
 
 oneiNote.utils module
---------------------------------------
+---------------------
 
 .. automodule:: oneiNote.utils
     :members:
