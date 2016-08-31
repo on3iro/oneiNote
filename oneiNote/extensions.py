@@ -22,7 +22,6 @@ migrate = Migrate()
 # Debug toolbar
 debug_tb = DebugToolbarExtension()
 
-
 ###############################
 # Login manager configuration #
 ###############################

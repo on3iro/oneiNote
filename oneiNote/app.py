@@ -24,8 +24,8 @@ def create_app(config_object=ProdConfig):
 
     app = Flask(__name__)
     app.config.from_object(config_object)
-    register_extensions(app)
     register_blueprints(app)
+    register_extensions(app)
     register_errorhandlers(app)
     init_admin(app)
     return app
