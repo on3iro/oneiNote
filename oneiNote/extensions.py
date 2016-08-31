@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CsrfProtect
+from flask_marshmallow import Marshmallow
 
 
 # Brypt
@@ -21,6 +22,9 @@ migrate = Migrate()
 
 # Debug toolbar
 debug_tb = DebugToolbarExtension()
+
+# Marshmallow
+marshmallow = Marshmallow()
 
 ###############################
 # Login manager configuration #

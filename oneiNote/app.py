@@ -5,7 +5,7 @@ from flask_admin import Admin
 
 from oneiNote.settings import ProdConfig
 from oneiNote.extensions import bcrypt, csrf_protect, db, migrate, \
-    login_manager, debug_tb
+    login_manager, debug_tb, marshmallow
 from oneiNote.main.views import main_blueprint
 from oneiNote.admin.views import MyModelView, MyAdminIndexView, UserView
 from oneiNote.users.views import users_blueprint
@@ -39,6 +39,7 @@ def register_extensions(app):
     csrf_protect.init_app(app)
     migrate.init_app(app, db)
     debug_tb.init_app(app)
+    marshmallow.init_app(app)
     return None
 
 

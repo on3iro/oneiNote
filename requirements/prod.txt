@@ -45,4 +45,4 @@ sphinx-rtd-theme==0.1.9
 
 # Rest api
 Flask-RESTful==0.3.5
-
+flask-marshmallow==0.7.0
