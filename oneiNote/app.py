@@ -12,6 +12,7 @@ from oneiNote.users.views import users_blueprint
 from oneiNote.users.models import User, Role
 from oneiNote.notes.views import notes_blueprint
 from oneiNote.notes.models import Note, Calendar_entry
+from oneiNote.api.api_v1 import api_blueprint
 
 
 def create_app(config_object=ProdConfig):
@@ -46,6 +47,7 @@ def register_blueprints(app):
     app.register_blueprint(users_blueprint)
     app.register_blueprint(main_blueprint)
     app.register_blueprint(notes_blueprint)
+    app.register_blueprint(api_blueprint)
     return None
 
 
