@@ -14,6 +14,7 @@ api = Api(api_blueprint, decorators=[csrf_protect.exempt])
 ###########
 # Schemas #
 ###########
+
 class NoteSchema(marshmallow.Schema):
     """Marshmallow schema for the Note model."""
     class Meta:
@@ -108,7 +109,8 @@ class NoteListAPI(Resource):
 
         if note is not None and note.title != '' and note.user_id != '':
             if note.save():
-                return jsonify(note.title)
+                result = note_schema.dump(note)
+                return jsonify(result.data)
             else:
                 raise InvalidAPIUsage('Could not create new note!', 500)
         else:
@@ -146,7 +148,9 @@ class SingleNoteAPI(Resource):
 
             note.content = args['content']
             note.save()
-            return 200
+
+            result = note_schema.dump(note)
+            return jsonify(result.data)
         else:
             return 404
 
@@ -155,7 +159,7 @@ class SingleNoteAPI(Resource):
 
         if note is not None:
             note.delete()
-            return 200
+            return {"Operation": "Delete", "Status": "successful"}, 200
         else:
             return 404
 
