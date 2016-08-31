@@ -33,6 +33,7 @@ notes_schema = NoteSchema(many=True)
 def get_model_entry_by_id(model_name, model_id):
     """Gets the entry of a certain model by id."""
     model_entry = model_name.query.filter_by(id=model_id).first()
+
     if model_entry is None:
         raise InvalidAPIUsage('This view does not exist.', status_code=410)
     else:
@@ -49,7 +50,9 @@ class InvalidAPIUsage(Exception):
 
     def __init__(self, message, status_code=None, payload=None):
         Exception.__init__(self)
+
         self.message = message
+
         if status_code is not None:
             self.status_code = status_code
         self.payload = payload
@@ -57,6 +60,7 @@ class InvalidAPIUsage(Exception):
     def to_dict(self):
         res = dict(self.payload or ())
         res['message'] = self.message
+
         return res
 
 
@@ -69,6 +73,7 @@ def handle_invalid_api_usage(error):
     """Handles invalid api usage and returns error in valid json format."""
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
+
     return response
 
 
@@ -96,17 +101,27 @@ class NoteListAPI(Resource):
         super(NoteListAPI, self).__init__()
 
     def get(self):
+        """Get list of Notes for current user."""
+        
+        # Get all notes TODO filter for current user
         all_notes = Note.query.all()
+
+        # Serialize notes
         result = notes_schema.dump(all_notes)
         return jsonify(result.data)
 
     def post(self):
+        """Create new note for current user."""
+
+        # Get request arguments
         args = self.reqparse.parse_args()
 
+        # Create new note from arguments
         note = Note(title=args['title'],
                     content=args['content'],
                     user_id=args['user_id'])
 
+        # Save note and return note as json
         if note is not None and note.title != '' and note.user_id != '':
             if note.save():
                 result = note_schema.dump(note)
@@ -133,15 +148,23 @@ class SingleNoteAPI(Resource):
         super(SingleNoteAPI, self).__init__()
 
     def get(self, note_id):
+        """Get note entry by id."""
         note_entry = get_model_entry_by_id(Note, note_id)
+
+        # Serialize note entry
         result = note_schema.dump(note_entry)
         return jsonify(result.data)
 
     def put(self, note_id):
+        """Edit note entry by id."""
+
+        # Get request arguments
         args = self.reqparse.parse_args()
 
+        # Get note by id
         note = get_model_entry_by_id(Note, note_id)
 
+        # Edit note and return note as json
         if note is not None:
             if args['title'] != '':
                 note.title = args['title']
@@ -149,24 +172,25 @@ class SingleNoteAPI(Resource):
             note.content = args['content']
             note.save()
 
+            # Serialize note
             result = note_schema.dump(note)
             return jsonify(result.data)
-        else:
-            return 404
 
     def delete(self, note_id):
+        """Delete note by id."""
+        # Get note
         note = get_model_entry_by_id(Note, note_id)
 
+        # Delete note
         if note is not None:
             note.delete()
             return {"Operation": "Delete", "Status": "successful"}, 200
-        else:
-            return 404
 
 # TODO IMPORTANT: Implement authorization
 # TODO proper formatting/refactoring
 # TODO tests
 # TODO proper return values
+# TODO created_at timezone support
 
 # Add Resources
 api.add_resource(NoteListAPI,
