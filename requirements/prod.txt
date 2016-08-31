@@ -40,5 +40,9 @@ Flask-DebugToolbar==0.10.0
 bpython==0.15
 
 # Documentation
-sphinx==1.4.6
-sphinx_rtd_theme
+Sphinx==1.4.6
+sphinx-rtd-theme==0.1.9
+
+# Rest api
+Flask-RESTful==0.3.5
+
