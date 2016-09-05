@@ -194,6 +194,7 @@ class SingleNoteAPI(Resource):
 
 # TODO tests
 # TODO created_at timezone support
+# TODO readd CSRF protection for standard urls
 
 # Add Resources
 api.add_resource(NoteListAPI,
