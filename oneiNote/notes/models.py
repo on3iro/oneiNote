@@ -14,7 +14,7 @@ class Note(SurrogatePK, Model):
     title = Column(db.String(160), unique=True, nullable=False)
     content = Column(db.Text, nullable=True)
     created_at = Column(db.DateTime, nullable=False,
-                        default=datetime.datetime.utcnow)
+                        default=datetime.datetime.now)
     user_id = reference_col('users', nullable=True)
     user = relationship('User', backref='notes')
 

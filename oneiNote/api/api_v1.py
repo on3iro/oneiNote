@@ -102,7 +102,7 @@ class NoteListAPI(Resource):
 
     def get(self):
         """Get list of Notes for current user."""
-        
+
         # Get all notes TODO filter for current user
         all_notes = Note.query.all()
 
