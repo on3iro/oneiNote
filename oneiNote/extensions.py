@@ -8,6 +8,7 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CsrfProtect
 from flask_marshmallow import Marshmallow
+from flask_jwt import JWT
 
 
 # Brypt
@@ -25,6 +26,9 @@ debug_tb = DebugToolbarExtension()
 
 # Marshmallow
 marshmallow = Marshmallow()
+
+# Flask JSON Web Token
+jwt = JWT()
 
 ###############################
 # Login manager configuration #

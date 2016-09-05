@@ -3,8 +3,10 @@
 
 from flask import Blueprint, jsonify
 from flask_restful import Resource, Api, reqparse
+from flask_jwt import jwt_required
 
 from oneiNote.extensions import marshmallow, csrf_protect
+from oneiNote.api.auth import authenticate, identity
 from oneiNote.notes.models import Note
 
 api_blueprint = Blueprint('api_v1', __name__, url_prefix='/api/v1')
@@ -81,8 +83,36 @@ def handle_invalid_api_usage(error):
 # API #
 #######
 
+class JWTAuth(Resource):
+    """Validates user and generates a authentication token."""
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username',
+                                   type=str,
+                                   required=True,
+                                   help='Username or password invalid.',
+                                   location='json')
+        self.reqparse.add_argument('password',
+                                   type=str,
+                                   required=True,
+                                   help='Username or password invalid.',
+                                   location='json')
+        super(JWTAuth, self).__init__()
+
+    def post(self):
+        """Authenticates user and returns json web token, if username
+        and password are valid."""
+        # Get request arguments
+        args = self.reqparse.parse_args()
+
+        # Authenticate user
+        return authenticate(args['username'], args['password'])
+
+
 class NoteListAPI(Resource):
     """Shows a list of all ToDos and lets you POST new Notes."""
+    method_decorators = [jwt_required]
+
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('title',
@@ -134,6 +164,8 @@ class NoteListAPI(Resource):
 
 class SingleNoteAPI(Resource):
     """Shows a single Note and lets you edit (PUT) or delete it."""
+    decorators = [jwt_required]
+
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('title',
@@ -187,12 +219,12 @@ class SingleNoteAPI(Resource):
             return {"Operation": "Delete", "Status": "successful"}, 200
 
 # TODO IMPORTANT: Implement authorization
-# TODO proper formatting/refactoring
 # TODO tests
-# TODO proper return values
 # TODO created_at timezone support
 
 # Add Resources
+api.add_resource(JWTAuth,
+                 '/auth')
 api.add_resource(NoteListAPI,
                  '/',
                  '/notes')
