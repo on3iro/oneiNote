@@ -11,7 +11,7 @@ from oneiNote.admin.views import MyModelView, MyAdminIndexView, UserView
 from oneiNote.users.views import users_blueprint
 from oneiNote.users.models import User, Role
 from oneiNote.notes.views import notes_blueprint
-from oneiNote.notes.models import Note, Calendar_entry
+from oneiNote.notes.models import Note
 from oneiNote.api.api_v1 import api_blueprint
 
 
@@ -78,7 +78,6 @@ def init_admin(app):
     admin.add_view(MyModelView(Role, db.session))
     admin.add_view(UserView(User, db.session))
     admin.add_view(MyModelView(Note, db.session))
-    admin.add_view(MyModelView(Calendar_entry, db.session))
 
     return None
 
