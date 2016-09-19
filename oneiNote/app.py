@@ -5,11 +5,14 @@ from flask_admin import Admin
 
 from oneiNote.settings import ProdConfig
 from oneiNote.extensions import bcrypt, csrf_protect, db, migrate, \
-    login_manager, debug_tb
+    login_manager, debug_tb, marshmallow, jwt
 from oneiNote.main.views import main_blueprint
 from oneiNote.admin.views import MyModelView, MyAdminIndexView, UserView
 from oneiNote.users.views import users_blueprint
 from oneiNote.users.models import User, Role
+from oneiNote.notes.views import notes_blueprint
+from oneiNote.notes.models import Note
+from oneiNote.api.api_v1 import api_blueprint
 
 
 def create_app(config_object=ProdConfig):
@@ -21,8 +24,8 @@ def create_app(config_object=ProdConfig):
 
     app = Flask(__name__)
     app.config.from_object(config_object)
-    register_extensions(app)
     register_blueprints(app)
+    register_extensions(app)
     register_errorhandlers(app)
     init_admin(app)
     return app
@@ -32,10 +35,16 @@ def register_extensions(app):
     """Register Flask extensions."""
     bcrypt.init_app(app)
     login_manager.init_app(app)
+
+    # Flask JWT
+    from oneiNote.api.auth import authenticate, identity
+    jwt.init_app(app)
+
     db.init_app(app)
     csrf_protect.init_app(app)
     migrate.init_app(app, db)
     debug_tb.init_app(app)
+    marshmallow.init_app(app)
     return None
 
 
@@ -43,6 +52,8 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(users_blueprint)
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(notes_blueprint)
+    app.register_blueprint(api_blueprint)
     return None
 
 
@@ -66,6 +77,7 @@ def init_admin(app):
     )
     admin.add_view(MyModelView(Role, db.session))
     admin.add_view(UserView(User, db.session))
+    admin.add_view(MyModelView(Note, db.session))
 
     return None
 

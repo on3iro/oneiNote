@@ -6,6 +6,7 @@ import pytest
 from flask_login import AnonymousUserMixin
 
 from oneiNote.users.models import Role, User
+from oneiNote.notes.models import Note
 from oneiNote.main.views import load_user
 
 from .factories import UserFactory
@@ -119,3 +120,11 @@ def test_load_user():
     user = User(email="ttester@test.com", username="ttester")
     user.save()
     assert user == load_user(user.get_id())
+
+
+class TestNote:
+    """Note tests."""
+
+    def test_note_string_representation(self):
+        note = Note(title="test note", content="content things")
+        assert str(note) == "test note"
