@@ -3,7 +3,7 @@
 
 from flask import Blueprint, jsonify
 from flask_restful import Resource, Api, reqparse
-from flask_jwt import jwt_required
+from flask_jwt import jwt_required, current_identity
 
 from oneiNote.extensions import marshmallow, csrf_protect
 from oneiNote.notes.models import Note
@@ -109,6 +109,7 @@ class NoteListAPI(Resource):
 
         # Get all notes TODO filter for current user
         all_notes = Note.query.all()
+        print(current_identity)
 
         # Serialize notes
         result = notes_schema.dump(all_notes)
