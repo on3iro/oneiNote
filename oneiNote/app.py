@@ -9,7 +9,8 @@ from oneiNote.settings import ProdConfig
 from oneiNote.extensions import bcrypt, csrf_protect, db, migrate, \
     login_manager, debug_tb, marshmallow, jwt
 from oneiNote.main.views import main_blueprint
-from oneiNote.admin.views import MyModelView, MyAdminIndexView, UserView
+from oneiNote.admin.views import MyModelView, MyAdminIndexView, \
+    UserView, NotesView
 from oneiNote.users.views import users_blueprint
 from oneiNote.users.models import User, Role
 from oneiNote.notes.views import notes_blueprint
@@ -32,7 +33,7 @@ def create_app(config_object=ProdConfig):
     init_admin(app)
 
     # Propagate JWTErrors through Flask-RESTful
-    app.handle_user_exception = handle_user_exception_again
+    # app.handle_user_exception = handle_user_exception_again
     return app
 
 
@@ -82,7 +83,7 @@ def init_admin(app):
     )
     admin.add_view(MyModelView(Role, db.session))
     admin.add_view(UserView(User, db.session))
-    admin.add_view(MyModelView(Note, db.session))
+    admin.add_view(NotesView(Note, db.session))
 
     return None
 
