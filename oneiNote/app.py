@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_admin import Admin
+from flask_jwt import JWTError
+from collections import OrderedDict
 
 from oneiNote.settings import ProdConfig
 from oneiNote.extensions import bcrypt, csrf_protect, db, migrate, \
@@ -28,6 +30,9 @@ def create_app(config_object=ProdConfig):
     register_extensions(app)
     register_errorhandlers(app)
     init_admin(app)
+
+    # Propagate JWTErrors through Flask-RESTful
+    app.handle_user_exception = handle_user_exception_again
     return app
 
 
@@ -107,3 +112,14 @@ def parse_401_to_404(error_code):
         error_code = 404
 
     return error_code
+
+
+def handle_user_exception_again(e):
+    """Propagates JWTErrors through Flask-RESTFul."""
+    if isinstance(e, JWTError):
+        return jsonify(OrderedDict([
+            ('status_code', e.status_code),
+            ('error', e.error),
+            ('description', e.description),
+        ])), e.status_code, e.headers
+    return e

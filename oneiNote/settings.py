@@ -20,7 +20,7 @@ class ProdConfig(Config):
     """Production configuration"""
     ENV = 'prod'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'  # TODO: Change me
+    SQLALCHEMY_DATABASE_URI = os.environ.get('ONEINOTE_SQLALCHEMY_URI') or 'postgresql://localhost/example'  # TODO: Change me
 
 
 class DevConfig(Config):
@@ -31,7 +31,7 @@ class DevConfig(Config):
     DB_NAME = 'dev.db'
     # Put the db file in project root
     DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('ONEINOTE_SQLALCHEMY_URI') or 'sqlite:///{0}'.format(DB_PATH)
 
 
 class TestConfig(Config):
