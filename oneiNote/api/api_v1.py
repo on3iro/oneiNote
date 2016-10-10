@@ -3,7 +3,7 @@
 
 from flask import Blueprint, jsonify
 from flask_restful import Resource, Api, reqparse
-from flask_jwt import jwt_required
+from flask_jwt import jwt_required, current_identity
 
 from oneiNote.extensions import marshmallow, csrf_protect
 from oneiNote.notes.models import Note
@@ -20,7 +20,7 @@ class NoteSchema(marshmallow.Schema):
     """Marshmallow schema for the Note model."""
     class Meta:
         # Fields to expose
-        fields = ('title', 'content', 'created_at', 'user_id', 'id')
+        fields = ('title', 'content', 'created_at', 'id')
 
 
 note_schema = NoteSchema()
@@ -98,17 +98,13 @@ class NoteListAPI(Resource):
                                    type=str,
                                    default='',
                                    location='json')
-        self.reqparse.add_argument('user_id', type=int,
-                                   required=True,
-                                   help='No user id provided',
-                                   location='json')
         super(NoteListAPI, self).__init__()
 
     def get(self):
         """Get list of Notes for current user."""
 
-        # Get all notes TODO filter for current user
-        all_notes = Note.query.all()
+        # Get all notes
+        all_notes = Note.query.filter(Note.user_id == current_identity.id)
 
         # Serialize notes
         result = notes_schema.dump(all_notes)
@@ -123,7 +119,7 @@ class NoteListAPI(Resource):
         # Create new note from arguments
         note = Note(title=args['title'],
                     content=args['content'],
-                    user_id=args['user_id'])
+                    user_id=current_identity.id)
 
         # Save note and return note as json
         if note is not None and note.title != '' and note.user_id != '':
@@ -133,6 +129,7 @@ class NoteListAPI(Resource):
             else:
                 raise InvalidAPIUsage('Could not create new note!', 500)
         else:
+            print("Hier!")
             raise InvalidAPIUsage('Could not create new note!', 500)
 
 
@@ -157,6 +154,9 @@ class SingleNoteAPI(Resource):
         """Get note entry by id."""
         note_entry = get_model_entry_by_id(Note, note_id)
 
+        if note_entry.user_id != current_identity.id:
+            raise InvalidAPIUsage('Could not find note!', 404)
+
         # Serialize note entry
         result = note_schema.dump(note_entry)
         return jsonify(result.data)
@@ -170,27 +170,31 @@ class SingleNoteAPI(Resource):
         # Get note by id
         note = get_model_entry_by_id(Note, note_id)
 
+        if note is None or note.user_id != current_identity.id:
+            raise InvalidAPIUsage('Could not find note!, 404')
+
         # Edit note and return note as json
-        if note is not None:
-            if args['title'] != '':
-                note.title = args['title']
+        if args['title'] != '':
+            note.title = args['title']
 
-            note.content = args['content']
-            note.save()
+        note.content = args['content']
+        note.save()
 
-            # Serialize note
-            result = note_schema.dump(note)
-            return jsonify(result.data)
+        # Serialize note
+        result = note_schema.dump(note)
+        return jsonify(result.data)
 
     def delete(self, note_id):
         """Delete note by id."""
         # Get note
         note = get_model_entry_by_id(Note, note_id)
 
+        if note is None or note.user_id != current_identity.id:
+            raise InvalidAPIUsage('Could not find note!, 404')
+
         # Delete note
-        if note is not None:
-            note.delete()
-            return {"Operation": "Delete", "Status": "successful"}, 200
+        note.delete()
+        return {"Operation": "Delete", "Status": "successful"}, 200
 
 # TODO tests
 # TODO created_at timezone support

@@ -55,6 +55,13 @@ class UserView(MyModelView):
                 and form.password_dummy.data is not None):
             User.set_password(form.password_dummy.data)
 
+
+# Create customized listview for notes
+class NotesView(MyModelView):
+    """Customized list view of notes."""
+    column_list = ('id', 'title', 'content', 'created_at', 'user', 'user_id')
+
+
 # Create customized index view class taht handles login & registration
 class MyAdminIndexView(admin.AdminIndexView):
     """Flask Admin view. Only Users with the 'is_admin' flag
